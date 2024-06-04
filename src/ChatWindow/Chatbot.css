@@ -80,3 +80,10 @@
 .input-area button:hover {
   background-color: #0056b3;
 }
+
+.uploaded-image {
+  max-width: 100%;
+  height: auto;
+  margin-top: 10px;
+  border-radius: 5px;
+}

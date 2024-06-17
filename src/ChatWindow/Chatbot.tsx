@@ -5,7 +5,8 @@ import { IoSend } from "react-icons/io5";
 import { TbRefreshAlert } from "react-icons/tb";
 import './Chatbot.css';
 import axios from 'axios';
-import AudioStreamer from './AudioStreamer.tsx';
+// import AudioStreamer from './AudioStreamer.tsx';
+import SendAudioSocket from './SendAudioSocket.tsx';
 
 const apiEndpoint = 'http://localhost:8000';
 
@@ -115,10 +116,10 @@ const Chatbot = () => {
     };
   }, []);
 
-  const handleReceiveMessage = (message: string) => {
-    const botMessage: MessageProps = { sender: 'bot', text: message };
-    setMessages((prevMessages) => ([...prevMessages, botMessage]));
-  };
+  // const handleReceiveMessage = (message: string) => {
+  //   const botMessage: MessageProps = { sender: 'bot', text: message };
+  //   setMessages((prevMessages) => ([...prevMessages, botMessage]));
+  // };
 
   return (
     <div className='chatbot-container'>
@@ -179,7 +180,8 @@ const Chatbot = () => {
           <TbRefreshAlert />
         </button>
       </form>
-      <AudioStreamer onReceiveMessage={handleReceiveMessage} />
+      {/* <AudioStreamer/> */}
+      <SendAudioSocket />
     </div>
   );
 };

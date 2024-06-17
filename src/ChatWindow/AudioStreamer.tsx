@@ -18,19 +18,20 @@ const AudioStreamer: React.FC<AudioStreamerProps> = ({ onReceiveMessage }) => {
     mediaRecorder.current.ondataavailable = (event) => {
       if (event.data.size > 0) {
         audioChunks.current.push(event.data);
+        console.log(audioChunks.current)
       }
     };
     mediaRecorder.current.start();
   };
 
   const handleStartRecording = () => {
-    setIsRecording(true);
+    // setIsRecording(true);
     audioChunks.current = [];
     navigator.mediaDevices.getUserMedia({ audio: true }).then(handleAudioStream);
   };
 
   const handleStopRecording = () => {
-    setIsRecording(false);
+    // setIsRecording(false);
     mediaRecorder.current?.stop();
     const audioBlob = new Blob(audioChunks.current, { type: 'audio/wav' });
     const reader = new FileReader();
@@ -41,6 +42,16 @@ const AudioStreamer: React.FC<AudioStreamerProps> = ({ onReceiveMessage }) => {
     };
     reader.readAsDataURL(audioBlob);
   };
+
+  const handleRecording = () => {
+    setIsRecording(!isRecording);
+    if (isRecording){
+      handleStartRecording()
+    }
+    else {
+      handleStopRecording()
+    }
+  }
 
   useEffect(() => {
     const newSocket = new WebSocket('ws://localhost:8000/ws');
@@ -64,7 +75,7 @@ const AudioStreamer: React.FC<AudioStreamerProps> = ({ onReceiveMessage }) => {
     <div className="audio-streamer">
       <button
         type="button"
-        onClick={isRecording ? handleStopRecording : handleStartRecording}
+        onClick={handleRecording}
         className='record-button'
         aria-label='Record Audio'
       >

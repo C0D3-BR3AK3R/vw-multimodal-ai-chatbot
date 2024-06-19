@@ -14,6 +14,8 @@ interface MessageProps {
   sender: 'user' | 'bot';
   text: string;
   imageUrl?: string;
+  timestamp: string;
+  responseTime?: number;
 }
 
 const formData = new FormData();
@@ -37,16 +39,28 @@ const Chatbot = () => {
     formData.append('text', input);
 
     try {
-      const userMessage: MessageProps = { sender: 'user', text: input, imageUrl: imageUrl };
+      const userMessage: MessageProps = { 
+        sender: 'user',
+        text: input,
+        imageUrl: imageUrl,
+        timestamp: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })
+      };
       setMessages((prevMessages) => ([...prevMessages, userMessage]));
 
+      const startTime = Date.now();
       const response = await axios.post(`${apiEndpoint}/Chatbot`, formData, {
         headers: {
           'content-type': 'multipart/form-data',
         },
       });
+      const endTime = Date.now();
 
-      const botMessage: MessageProps = { sender: 'bot', text: response.data.answer };
+      const botMessage: MessageProps = { 
+        sender: 'bot',
+        text: response.data.answer,
+        timestamp: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }),
+        responseTime: (endTime - startTime) / 1000
+      };
       setMessages((prevMessages) => ([...prevMessages, botMessage]));
     } catch (error) {
       console.error(error);
@@ -126,9 +140,13 @@ const Chatbot = () => {
       <div className='chat-window'>
         {messages.map((message, index) => (
           <div key={index} className={`message ${message.sender}`}>
-            {message.text}
+            <div className='message-text'>{message.text}</div>
             {message.imageUrl && <img src={message.imageUrl} alt='Uploaded content' className='uploaded-image' />}
-          </div>
+            <div className='message-timestamp'>{message.timestamp.toLocaleString()}</div>
+            {message.sender === 'bot' && message.responseTime && 
+              <div className='message-response-time'>Response time: {message.responseTime} seconds</div>
+            }
+        </div>
         ))}
       </div>
       <form onSubmit={handleSend} className='input-area' method='POST' encType='multipart/form-data'>

@@ -3,6 +3,7 @@ import { LuImagePlus } from "react-icons/lu";
 import { TfiVideoClapper } from "react-icons/tfi";
 import { IoSend } from "react-icons/io5";
 import { TbRefreshAlert } from "react-icons/tb";
+import Markdown from 'react-markdown'
 import './Chatbot.css';
 import axios from 'axios';
 // import AudioStreamer from './AudioStreamer.tsx';
@@ -14,6 +15,7 @@ interface MessageProps {
   sender: 'user' | 'bot';
   text: string;
   imageUrl?: string;
+  videoUrl?: string;
   timestamp: string;
   responseTime?: number;
 }
@@ -23,9 +25,12 @@ const formData = new FormData();
 const Chatbot = () => {
   const [messages, setMessages] = useState<MessageProps[]>([]);
   const [input, setInput] = useState<string>('');
+  const [chatType, setChatType] = useState<string>('Image');
   const [imageUrl, setImage] = useState<string>('');
+  const [videoUrl, setVideo] = useState<string>('');
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const imageInputRef = useRef<HTMLInputElement>(null);
+  const videoInputRef = useRef<HTMLInputElement>(null);
   const textInputRef = useRef<HTMLInputElement>(null);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -43,21 +48,34 @@ const Chatbot = () => {
         sender: 'user',
         text: input,
         imageUrl: imageUrl,
+        videoUrl: videoUrl,
         timestamp: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })
       };
       setMessages((prevMessages) => ([...prevMessages, userMessage]));
 
       const startTime = Date.now();
-      const response = await axios.post(`${apiEndpoint}/Chatbot`, formData, {
-        headers: {
-          'content-type': 'multipart/form-data',
-        },
-      });
+      let answer = '';
+      if (chatType === 'Image') {
+        const response = await axios.post(`${apiEndpoint}/Chatbot`, formData, {
+          headers: {
+            'content-type': 'multipart/form-data',
+          },
+        });
+        answer = response.data.answer;
+      }
+      else if (chatType === 'Video'){
+        const response = await axios.post(`${apiEndpoint}/VideoChatbot`, formData, {
+          headers: {
+            'content-type': 'multipart/form-data',
+          },
+        });
+        answer = response.data.answer;
+      }
       const endTime = Date.now();
 
       const botMessage: MessageProps = { 
         sender: 'bot',
-        text: response.data.answer,
+        text: answer,
         timestamp: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }),
         responseTime: (endTime - startTime) / 1000
       };
@@ -70,6 +88,7 @@ const Chatbot = () => {
     formData.delete('image');
     setInput('');
     setImage('');
+    setVideo('');
   };
 
   const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
@@ -82,8 +101,25 @@ const Chatbot = () => {
         }
       };
       reader.readAsDataURL(e.target.files[0]);
+      setChatType('Image');
     } else {
-      console.error("Unable to upload file");
+      console.error("Unable to upload image");
+    }
+  };
+
+  const handleVideoUpload = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      formData.append('video', e.target.files[0]);
+      const reader = new FileReader();
+      reader.onload = () => {
+        if (reader.result) {
+          setVideo(reader.result as string);
+        }
+      };
+      reader.readAsDataURL(e.target.files[0]);
+      setChatType('Video');
+    } else {
+      console.error("Unable to upload video");
     }
   };
 
@@ -140,27 +176,27 @@ const Chatbot = () => {
       <div className='chat-window'>
         {messages.map((message, index) => (
           <div key={index} className={`message ${message.sender}`}>
-            <div className='message-text'>{message.text}</div>
+            <Markdown className='message-text'>{message.text}</Markdown>
             {message.imageUrl && <img src={message.imageUrl} alt='Uploaded content' className='uploaded-image' />}
-            <div className='message-timestamp'>{message.timestamp.toLocaleString()}</div>
+            <Markdown className='message-timestamp'>{message.timestamp.toLocaleString()}</Markdown>
             {message.sender === 'bot' && message.responseTime && 
-              <div className='message-response-time'>Response time: {message.responseTime} seconds</div>
+              <div className='message-response-time response-time-style'>Response time: {message.responseTime} seconds</div>
             }
-        </div>
+          </div>
         ))}
       </div>
       <form onSubmit={handleSend} className='input-area' method='POST' encType='multipart/form-data'>
         <input
           type="file"
-          ref={fileInputRef}
-          onChange={handleImageUpload}
+          ref={videoInputRef}
+          onChange={handleVideoUpload}
           style={{ display: 'none' }}
           className='file-upload'
-          accept=".jpg"
+          accept=".mp4"
         />
         <button
           type="button"
-          onClick={() => fileInputRef.current?.click()}
+          onClick={() => imageInputRef.current?.click()}
           className='file-upload-button'
           aria-label='Upload Image'
         >
@@ -168,15 +204,15 @@ const Chatbot = () => {
         </button>
         <input
           type="file"
-          ref={fileInputRef}
+          ref={imageInputRef}
           onChange={handleImageUpload}
           style={{ display: 'none' }}
           className='file-upload'
-          accept=".mp4,.jpg,.png"
+          accept=".jpg,.png,.jpeg"
         />
         <button
           type="button"
-          onClick={() => fileInputRef.current?.click()}
+          onClick={() => videoInputRef.current?.click()}
           className='file-upload-button'
           aria-label='Upload Video'
         >

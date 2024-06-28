@@ -26,6 +26,19 @@
   max-width: 70%;
   width: fit-content;
   word-wrap: break-word;
+  text-align: left;
+}
+
+.message-timestamp {
+  font-size: 0.8em;
+  color: rgb(187, 187, 187);
+  text-align: right;
+}
+
+.response-time-style {
+  font-size: 0.8em;
+  color: grey;
+  text-align: left;
 }
 
 .message.user {
@@ -37,7 +50,7 @@
 .message.bot {
   background-color: #f1f0f0;
   color: #0056b3;
-  align-self: flex-start;
+  /* align-self: flex-start; */
 }
 
 .input-area {

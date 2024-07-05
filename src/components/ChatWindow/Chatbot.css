@@ -47,7 +47,7 @@
 }
 
 .message.bot {
-  background-color: #f1f0f0;
+  background-color: #c7c7c7;
   color: #0056b3;
   /* align-self: flex-start; */
 }
@@ -109,7 +109,7 @@
 }
 
 .uploaded-image {
-  max-width: 100%;
+  max-width: 250px;
   height: auto;
   margin-top: 10px;
   border-radius: 5px;

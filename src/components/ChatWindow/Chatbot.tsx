@@ -7,7 +7,7 @@ import Markdown from 'react-markdown'
 import './Chatbot.css';
 import axios from 'axios';
 // import AudioStreamer from './AudioStreamer.tsx';
-import SendAudioSocket from './SendAudioSocket.tsx';
+// import SendAudioSocket from './SendAudioSocket.tsx';
 
 const apiEndpoint = 'http://localhost:8000';
 

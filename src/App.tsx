@@ -1,5 +1,5 @@
 import './App.css'
-import Chatbot from './ChatWindow/Chatbot'
+import Chatbot from './components/ChatWindow/Chatbot'
 import Sidebar from './components/sidebar/Sidebar'
 
 function App() {

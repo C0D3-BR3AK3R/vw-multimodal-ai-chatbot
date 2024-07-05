@@ -222,15 +222,22 @@ const Chatbot = () => {
         >
           <TfiVideoClapper />
         </button>
-        <input
-          type="text"
-          value={input}
-          onChange={handleInputChange}
-          placeholder='How can I help you today?'
-          className='text-box'
-          aria-label='Message Input'
-          ref={textInputRef}
-        />
+        <div className='text-box-with-preview'>
+          {imageUrl && (
+            <div className="image-preview">
+              <img src={imageUrl} alt="Image preview" className="preview-image" />
+            </div>
+          )}
+          <input
+            type="text"
+            value={input}
+            onChange={handleInputChange}
+            placeholder='How can I help you today?'
+            className='text-box'
+            aria-label='Message Input'
+            ref={textInputRef}
+          />
+        </div>
         <button type='submit' className='submit-button' aria-label='Send Message'>
           <IoSend />
         </button>

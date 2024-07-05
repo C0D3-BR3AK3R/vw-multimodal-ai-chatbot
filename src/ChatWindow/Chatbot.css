@@ -1,9 +1,8 @@
 .chatbot-container {
   display: flex;
   flex-direction: column;
-  height: 90vh;
-  width: 150vh;
-  margin: 0 auto;
+  min-width: 79%;
+  height: 85vh;
   border: 0px solid #ccc;
   border-radius: 8px;
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);

@@ -1,0 +1,55 @@
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    min-width: 20%;
+}
+
+.sidebar-title {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    height: 15vh;
+}
+
+.sidebar-container {
+    display: flex;
+    flex-direction: column;
+    border-radius: 1vh;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+    height: 70vh;
+    padding: 1vh;
+}
+
+.upload-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.button-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    align-items: flex-end;
+    margin-bottom: 2vh;
+}
+
+.upload-box {
+    border: 2px dashed #ccc;
+    border-radius: 5px;
+    padding: 60px;
+    text-align: center;
+    cursor: pointer;
+    margin: 15px 5px;
+}
+
+.upload-box:hover {
+    background-color: rgba(139, 139, 139, 0.1);
+}
+
+.upload-button {
+    display: flex;
+    width: 45%;
+    justify-content: center;
+}

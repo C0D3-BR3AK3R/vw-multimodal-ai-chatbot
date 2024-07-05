@@ -102,6 +102,7 @@ const Chatbot = () => {
       };
       reader.readAsDataURL(e.target.files[0]);
       setChatType('Image');
+      console.log(`Chat Type => ${chatType}`);
     } else {
       console.error("Unable to upload image");
     }
@@ -118,6 +119,7 @@ const Chatbot = () => {
       };
       reader.readAsDataURL(e.target.files[0]);
       setChatType('Video');
+      console.log(`Chat Type = ${chatType}`);
     } else {
       console.error("Unable to upload video");
     }
@@ -139,6 +141,8 @@ const Chatbot = () => {
         if (item.type.indexOf('image') !== -1) {
           const file = item.getAsFile();
           if (file) {
+            setChatType('Image');
+            console.log(`Chat Type: ${chatType}`);
             formData.append('image', file);
             const reader = new FileReader();
             reader.onload = () => {

@@ -13,11 +13,11 @@ const Sidebar = () => {
         if (fileInputRef.current) fileInputRef.current.click();
     };
 
-    const handleFileChange = (event: any) => {
-        const file = event.target.files[0];
-        if (file) {
-          const url = URL.createObjectURL(file);
-          setVideoURL(url);
+    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files && event.target.files[0]) {
+            const file = event.target.files[0];
+            const url = URL.createObjectURL(file);
+            setVideoURL(url);
         }
     };
 

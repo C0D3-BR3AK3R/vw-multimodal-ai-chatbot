@@ -30,7 +30,8 @@
 
 .button-container {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    justify-content: space-evenly;
     width: 100%;
     align-items: flex-end;
     margin-bottom: 2vh;
@@ -51,8 +52,23 @@
     background-color: rgba(139, 139, 139, 1);
 }
 
+.video-preview {
+    display: flex;
+    width: 100%;
+}
+
+.video {
+    width: 100%;
+    border-radius: 5px;
+    margin: 15px 5px;
+}
+
 .upload-button {
     display: flex;
     width: 45%;
     justify-content: center;
+}
+
+.transcript {
+    color: black;
 }

@@ -59,10 +59,11 @@
   align-items: flex-end;
 }
 
-.input-area input.text-box {
+.input-area textarea {
   height: 3vh;
   padding: 9px;
   border: 0px solid #ccc;
+  resize: none;
   border-radius: 10px;
   box-shadow: 0 0 1px rgba(0, 0, 0, 1);
   color: whitesmoke;

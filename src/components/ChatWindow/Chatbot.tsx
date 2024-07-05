@@ -31,9 +31,9 @@ const Chatbot = () => {
 
   const imageInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
-  const textInputRef = useRef<HTMLInputElement>(null);
+  const textInputRef = useRef<HTMLTextAreaElement>(null);
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setInput(e.target.value);
   };
 
@@ -228,8 +228,7 @@ const Chatbot = () => {
               <img src={imageUrl} alt="Image preview" className="preview-image" />
             </div>
           )}
-          <input
-            type="text"
+          <textarea
             value={input}
             onChange={handleInputChange}
             placeholder='How can I help you today?'

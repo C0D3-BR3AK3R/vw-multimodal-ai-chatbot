@@ -246,7 +246,7 @@ const Chatbot = () => {
         </button>
       </form>
       {/* <AudioStreamer/> */}
-      <SendAudioSocket />
+      {/* <SendAudioSocket /> */}
     </div>
   );
 };

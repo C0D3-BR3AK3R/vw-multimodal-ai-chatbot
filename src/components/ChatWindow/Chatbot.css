@@ -65,6 +65,7 @@
   border: 0px solid #ccc;
   border-radius: 10px;
   box-shadow: 0 0 1px rgba(0, 0, 0, 1);
+  color: whitesmoke;
   background-color: #7E7E7E;
 }
 
@@ -73,7 +74,8 @@
   flex-direction: column;
   width: 100%;
   border-width: 2px;
-  border-color: navajowhite;
+  border-radius: 10px;
+  background-color: #a9a9a9;
 }
 
 .input-area input.file-upload {
@@ -115,15 +117,15 @@
 
 .image-preview {
   display: flex;
-  justify-content: center;
+  justify-content: left;
   align-items: center;
+  padding-left: 10px;
   margin-top: 10px;
   margin-bottom: 10px;
 }
 
 .preview-image {
   max-width: 100px;
-  max-height: 100px;
-  border-radius: 10px;
-  border: 2px solid #ddd;
+  max-height: 70px;
+  border-radius: 5px;
 }

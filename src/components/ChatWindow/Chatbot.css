@@ -6,7 +6,7 @@
   border: 0px solid #ccc;
   border-radius: 8px;
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
-  background-color: #393939;
+  background-color: #EDEDED;
 }
 
 .chat-window {
@@ -63,9 +63,9 @@
   height: 3vh;
   padding: 9px;
   border: 0px solid #ccc;
-  border-radius: 4px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 1) inset;
-  background-color: #505050;
+  border-radius: 10px;
+  box-shadow: 0 0 1px rgba(0, 0, 0, 1);
+  background-color: #7E7E7E;
 }
 
 .text-box-with-preview {

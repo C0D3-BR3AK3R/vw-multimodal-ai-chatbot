@@ -9,7 +9,7 @@
   flex-direction: row;
   gap: 2vh;
   padding: 2vh;
-  border: 2px solid white;
+  border: 0px solid white;
   height: 95vh;
   align-items: flex-end;
 }

@@ -19,6 +19,7 @@
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
     height: 75vh;
     padding: 1vh;
+    background-color: #EDEDED;
 }
 
 .upload-container {
@@ -36,16 +37,18 @@
 }
 
 .upload-box {
-    border: 2px dashed #ccc;
+    border: 2px dashed rgb(91, 91, 91);
     border-radius: 5px;
     padding: 60px;
     text-align: center;
     cursor: pointer;
     margin: 15px 5px;
+    background-color: #C7C7C7;
+    color: rgb(91, 91, 91);
 }
 
 .upload-box:hover {
-    background-color: rgba(139, 139, 139, 0.1);
+    background-color: rgba(139, 139, 139, 1);
 }
 
 .upload-button {

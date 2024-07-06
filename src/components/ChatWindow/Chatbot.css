@@ -19,6 +19,7 @@
 }
 
 .message {
+  font-size: large;
   margin: 10px 0;
   padding: 10px;
   border-radius: 5px;
@@ -30,7 +31,7 @@
 
 .message-timestamp {
   font-size: 0.8em;
-  color: rgb(187, 187, 187);
+  color: rgb(132, 132, 132);
   text-align: right;
 }
 
@@ -41,14 +42,14 @@
 }
 
 .message.user {
-  background-color: #0056b3;
+  background-color: #001E50;
   color: #f1f0f0;
   align-self: flex-end;
 }
 
 .message.bot {
   background-color: #c7c7c7;
-  color: #0056b3;
+  color: #001E50;
   /* align-self: flex-start; */
 }
 
@@ -60,6 +61,9 @@
 }
 
 .input-area textarea {
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-size: medium;
+  font-weight: 400;
   height: 3vh;
   padding: 9px;
   border: 0px solid #ccc;
@@ -116,9 +120,15 @@
   border-radius: 5px;
 }
 
-.image-preview {
+.image-preview-thumbnail {
   display: flex;
   justify-content: left;
+  align-items: center;
+}
+
+.img-preview {
+  display: flex;
+  flex-direction: row;
   align-items: center;
   padding-left: 10px;
   margin-top: 10px;
@@ -126,7 +136,43 @@
 }
 
 .preview-image {
-  max-width: 100px;
-  max-height: 70px;
+  height: 70px;
+  width: 70px;
   border-radius: 5px;
+}
+
+.remove-button-div {
+  display: flex;
+  flex-direction: row;
+  position: relative;
+  align-self: flex-start;
+  width: 70px;
+  height: 70px;
+  padding-right: 10px;
+}
+
+.warning-message {
+  display: flex;
+  flex-direction: row;
+  color: red;
+  font-size: 0.8em;
+  padding-left: 10px;
+}
+
+.img-preview button {
+  position: absolute;
+  height: 70px;
+  width: 70px;
+  font-size: large;
+  background-color: transparent;
+  color: transparent;
+  padding: 0px;
+  margin: 0px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.img-preview button:hover {
+  background-color: rgba(108, 108, 108, 0.562);
+  color: rgba(0, 0, 0, 0.807);
 }

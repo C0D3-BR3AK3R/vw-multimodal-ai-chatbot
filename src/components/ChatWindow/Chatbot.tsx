@@ -1,8 +1,12 @@
 import { ChangeEvent, FormEvent, useState, useRef, useEffect } from 'react';
+
+// Importing the icons
 import { LuImagePlus } from "react-icons/lu";
 import { TfiVideoClapper } from "react-icons/tfi";
 import { IoSend } from "react-icons/io5";
 import { TbRefreshAlert } from "react-icons/tb";
+import { CiCircleRemove } from "react-icons/ci";
+
 import Markdown from 'react-markdown'
 import './Chatbot.css';
 import axios from 'axios';
@@ -158,6 +162,16 @@ const Chatbot = () => {
     }
   };
 
+  const handlePressEnter = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      const form = document.querySelector('form.input-area') as HTMLFormElement;
+      if (form) {
+        form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+      }
+    }
+  };
+
   useEffect(() => {
     if (textInputRef.current) {
       textInputRef.current.addEventListener('paste', handlePaste);
@@ -224,13 +238,24 @@ const Chatbot = () => {
         </button>
         <div className='text-box-with-preview'>
           {imageUrl && (
-            <div className="image-preview">
-              <img src={imageUrl} alt="Image preview" className="preview-image" />
+            <div className='img-preview'>
+              <div className='remove-button-div'>
+                <button className='remove-img-preview'>
+                  <CiCircleRemove 
+                    strokeWidth={1}
+                  />
+                </button>
+                <div className="image-preview-thumbnail">
+                  <img src={imageUrl} alt="Image preview" className="preview-image" />
+                </div>
+              </div>
+              <div className='warning-message'></div>
             </div>
           )}
           <textarea
             value={input}
             onChange={handleInputChange}
+            onKeyDown={handlePressEnter}
             placeholder='How can I help you today?'
             className='text-box'
             aria-label='Message Input'

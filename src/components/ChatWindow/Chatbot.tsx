@@ -243,6 +243,7 @@ const Chatbot = () => {
                 <button className='remove-img-preview'>
                   <CiCircleRemove 
                     strokeWidth={1}
+                    size={25}
                   />
                 </button>
                 <div className="image-preview-thumbnail">

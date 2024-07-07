@@ -172,6 +172,18 @@ const Chatbot = () => {
     }
   };
 
+  const handleClearTextArea = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      setInput('');
+      setImage('');
+    }
+  }
+
+  const removeImagePreview = () => {
+    setImage('');
+    formData.delete('image');
+  }
+
   useEffect(() => {
     if (textInputRef.current) {
       textInputRef.current.addEventListener('paste', handlePaste);
@@ -240,7 +252,7 @@ const Chatbot = () => {
           {imageUrl && (
             <div className='img-preview'>
               <div className='remove-button-div'>
-                <button className='remove-img-preview'>
+                <button className='remove-img-preview' onClick={removeImagePreview}>
                   <CiCircleRemove 
                     strokeWidth={1}
                     size={25}
@@ -257,7 +269,7 @@ const Chatbot = () => {
             value={input}
             onChange={handleInputChange}
             onKeyDown={handlePressEnter}
-            placeholder='How can I help you today?'
+            onKeyUp={handleClearTextArea}
             className='text-box'
             aria-label='Message Input'
             ref={textInputRef}

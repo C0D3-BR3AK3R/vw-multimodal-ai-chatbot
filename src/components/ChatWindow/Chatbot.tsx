@@ -15,6 +15,14 @@ import axios from 'axios';
 
 const apiEndpoint = 'http://localhost:8000';
 
+type chatType = {
+  mode: "Image" | "Video";
+}
+
+type VideoStatus = {
+  status: "processed" | "processing" | "null";
+}
+
 interface MessageProps {
   sender: 'user' | 'bot';
   text: string;
@@ -26,10 +34,14 @@ interface MessageProps {
 
 const formData = new FormData();
 
-const Chatbot = () => {
+const Chatbot = ({ chatType, setChatType, videoStatus, warning }: { 
+  chatType: chatType, 
+  setChatType: React.Dispatch<React.SetStateAction<chatType>>,
+  videoStatus:  VideoStatus,
+  warning: string,
+}) => {
   const [messages, setMessages] = useState<MessageProps[]>([]);
   const [input, setInput] = useState<string>('');
-  const [chatType, setChatType] = useState<string>('Image');
   const [imageUrl, setImage] = useState<string>('');
   const [videoUrl, setVideo] = useState<string>('');
 
@@ -59,7 +71,7 @@ const Chatbot = () => {
 
       const startTime = Date.now();
       let answer = '';
-      if (chatType === 'Image') {
+      if (chatType.mode === 'Image') {
         const response = await axios.post(`${apiEndpoint}/Chatbot`, formData, {
           headers: {
             'content-type': 'multipart/form-data',
@@ -67,7 +79,7 @@ const Chatbot = () => {
         });
         answer = response.data.answer;
       }
-      else if (chatType === 'Video'){
+      else if (chatType.mode === 'Video'){
         const response = await axios.post(`${apiEndpoint}/VideoChatbot`, formData, {
           headers: {
             'content-type': 'multipart/form-data',
@@ -105,8 +117,8 @@ const Chatbot = () => {
         }
       };
       reader.readAsDataURL(e.target.files[0]);
-      setChatType('Image');
-      console.log(`Chat Type => ${chatType}`);
+      setChatType({mode: "Image"});
+      console.log(`Chat Type => ${chatType.mode}`);
     } else {
       console.error("Unable to upload image");
     }
@@ -122,8 +134,8 @@ const Chatbot = () => {
         }
       };
       reader.readAsDataURL(e.target.files[0]);
-      setChatType('Video');
-      console.log(`Chat Type = ${chatType}`);
+      setChatType({mode: "Video"});
+      console.log(`Chat Type = ${chatType.mode}`);
     } else {
       console.error("Unable to upload video");
     }
@@ -145,8 +157,8 @@ const Chatbot = () => {
         if (item.type.indexOf('image') !== -1) {
           const file = item.getAsFile();
           if (file) {
-            setChatType('Image');
-            console.log(`Chat Type: ${chatType}`);
+            setChatType({mode: "Image"});
+            console.log(`Chat Type: ${chatType.mode}`);
             formData.append('image', file);
             const reader = new FileReader();
             reader.onload = () => {
@@ -163,7 +175,7 @@ const Chatbot = () => {
   };
 
   const handlePressEnter = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === 'Enter' && !e.shiftKey && videoStatus.status !== 'processing') {
       e.preventDefault();
       const form = document.querySelector('form.input-area') as HTMLFormElement;
       if (form) {
@@ -262,8 +274,11 @@ const Chatbot = () => {
                   <img src={imageUrl} alt="Image preview" className="preview-image" />
                 </div>
               </div>
-              <div className='warning-message'></div>
+              <div className='warning-message'>{warning}</div>
             </div>
+          )}
+          {videoStatus.status === 'processing' && (
+            <div className='warning-message'>{warning}</div>
           )}
           <textarea
             value={input}
@@ -275,7 +290,7 @@ const Chatbot = () => {
             ref={textInputRef}
           />
         </div>
-        <button type='submit' className='submit-button' aria-label='Send Message'>
+        <button type='submit' className='submit-button' aria-label='Send Message' disabled={videoStatus.status === 'processing'}>
           <IoSend />
         </button>
         <button onClick={handleHistoryReset} type="button" className='reset-chat-button' aria-label='Reset Chat'>

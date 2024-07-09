@@ -14,12 +14,19 @@ type VideoStatus = {
     status: "processed" | "processing" | "null";
   }
 
+type InfType = {
+    mode: "Full Context" | "VectorDB Timestamp";
+}
+
 const formData = new FormData();
 
-const Sidebar = ({ setChatType, setVideoStatus, setWarning }: {
+const Sidebar = ({ setChatType, setVideoStatus, setWarning, infType, setInfType, setVideoName }: {
     setChatType: React.Dispatch<React.SetStateAction<chatType>>,
     setVideoStatus: React.Dispatch<React.SetStateAction<VideoStatus>>,
-    setWarning: React.Dispatch<React.SetStateAction<string>>
+    setWarning: React.Dispatch<React.SetStateAction<string>>,
+    infType: InfType,
+    setInfType: React.Dispatch<React.SetStateAction<InfType>>,
+    setVideoName: React.Dispatch<React.SetStateAction<string>>
 }) => {
 
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -32,6 +39,7 @@ const Sidebar = ({ setChatType, setVideoStatus, setWarning }: {
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files[0]) {
+            setVideoName(event.target.files[0].name);
             formData.append('video', event.target.files[0]);
             console.log(formData.get('video'));
             const file = event.target.files[0];
@@ -70,6 +78,15 @@ const Sidebar = ({ setChatType, setVideoStatus, setWarning }: {
         }
     }
 
+    const handleInfTypeToggle = () => {
+        if (infType.mode === 'Full Context') {
+            setInfType({mode: 'VectorDB Timestamp'});
+        } else {
+            setInfType({mode: 'Full Context'});
+        }
+        console.log(infType.mode);
+    }
+    
     useEffect(() => {
         if (videoURL && videoRef.current) {
             videoRef.current.volume = 0.1;
@@ -100,6 +117,10 @@ const Sidebar = ({ setChatType, setVideoStatus, setWarning }: {
                     <div className="button-container">
                         <button className='remove-button' onClick={handleVideoRemoval}><FontAwesomeIcon icon={faRemove} /></button>
                         <button className="upload-button" type='submit'>Upload</button>
+                        {infType.mode === 'Full Context' ? 
+                            (<button className='inf-type-toggle full-context' onClick={handleInfTypeToggle}><img src="./multipage_icon.png" alt="" className='toggle-icon' /></button>) :
+                            (<button className='inf-type-toggle vectordb' onClick={handleInfTypeToggle}><img src="./db-icon.png" alt="" className='toggle-icon' /></button>)
+                        }
                     </div>
                     <div className="transcript">
                         <h2>Transcript</h2>

@@ -72,3 +72,14 @@
 .transcript {
     color: black;
 }
+
+.toggle-icon {
+    max-width: 23px;
+    max-height: 23px;
+}
+
+.inf-type-toggle {
+    align-content: center;
+    height: 43px;
+    width: auto;
+}

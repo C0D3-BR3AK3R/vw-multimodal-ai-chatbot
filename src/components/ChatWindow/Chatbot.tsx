@@ -23,6 +23,10 @@ type VideoStatus = {
   status: "processed" | "processing" | "null";
 }
 
+type InfType = {
+  mode: "Full Context" | "VectorDB Timestamp";
+}
+
 interface MessageProps {
   sender: 'user' | 'bot';
   text: string;
@@ -34,11 +38,13 @@ interface MessageProps {
 
 const formData = new FormData();
 
-const Chatbot = ({ chatType, setChatType, videoStatus, warning }: { 
+const Chatbot = ({ chatType, setChatType, videoStatus, warning, infType, videoName }: { 
   chatType: chatType, 
   setChatType: React.Dispatch<React.SetStateAction<chatType>>,
   videoStatus:  VideoStatus,
   warning: string,
+  infType: InfType,
+  videoName: string,
 }) => {
   const [messages, setMessages] = useState<MessageProps[]>([]);
   const [input, setInput] = useState<string>('');
@@ -80,7 +86,10 @@ const Chatbot = ({ chatType, setChatType, videoStatus, warning }: {
         answer = response.data.answer;
       }
       else if (chatType.mode === 'Video'){
-        const response = await axios.post(`${apiEndpoint}/VideoChatbot`, formData, {
+        formData.append('inference_type', infType.mode);
+        formData.append('video_id', videoName);
+        console.warn(`video_id: ${videoName}\ntext: ${input}\ninference_type: ${infType.mode}`);
+        const response = await axios.post(`${apiEndpoint}/video_chatbot_2.0`, formData, {
           headers: {
             'content-type': 'multipart/form-data',
           },
@@ -126,14 +135,14 @@ const Chatbot = ({ chatType, setChatType, videoStatus, warning }: {
 
   const handleVideoUpload = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      formData.append('video', e.target.files[0]);
-      const reader = new FileReader();
-      reader.onload = () => {
-        if (reader.result) {
-          setVideo(reader.result as string);
-        }
-      };
-      reader.readAsDataURL(e.target.files[0]);
+      formData.append('video', e.target.files[0].name);
+      // const reader = new FileReader();
+      // reader.onload = () => {
+      //   if (reader.result) {
+      //     setVideo(reader.result as string);
+      //   }
+      // };
+      // reader.readAsDataURL(e.target.files[0]);
       setChatType({mode: "Video"});
       console.log(`Chat Type = ${chatType.mode}`);
     } else {

@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUpload, faRemove } from '@fortawesome/free-solid-svg-icons';
 
 const apiEndpoint = 'http://localhost:8000';
+// const apiEndpoint = 'https://troll-deep-doe.ngrok-free.app';
 
 type chatType = {
     mode: "Image" | "Video";

@@ -118,9 +118,10 @@ const Sidebar = ({ setChatType, setVideoStatus, setWarning, infType, setInfType,
                     <div className="button-container">
                         <button className='remove-button' onClick={handleVideoRemoval}><FontAwesomeIcon icon={faRemove} /></button>
                         <button className="upload-button" type='submit'>Upload</button>
+                        
                         {infType.mode === 'Full Context' ? 
-                            (<button className='inf-type-toggle full-context' onClick={handleInfTypeToggle}><img src="./multipage_icon.png" alt="" className='toggle-icon' /></button>) :
-                            (<button className='inf-type-toggle vectordb' onClick={handleInfTypeToggle}><img src="./db-icon.png" alt="" className='toggle-icon' /></button>)
+                            (<button className='inf-type-toggle full-context' type='button' onClick={handleInfTypeToggle}><img src="./multipage_icon.png" alt="" className='toggle-icon' /></button>) :
+                            (<button className='inf-type-toggle vectordb' type='button' onClick={handleInfTypeToggle}><img src="./db-icon.png" alt="" className='toggle-icon' /></button>)
                         }
                     </div>
                     <div className="transcript">

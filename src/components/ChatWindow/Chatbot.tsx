@@ -78,7 +78,7 @@ const Chatbot = ({ chatType, setChatType, videoStatus, warning, infType, videoNa
       const startTime = Date.now();
       let answer = '';
       if (chatType.mode === 'Image') {
-        const response = await axios.post(`${apiEndpoint}/Chatbot`, formData, {
+        const response = await axios.post(`${apiEndpoint}/api/chatbot/Chatbot`, formData, {
           headers: {
             'content-type': 'multipart/form-data',
           },
@@ -89,7 +89,7 @@ const Chatbot = ({ chatType, setChatType, videoStatus, warning, infType, videoNa
         formData.append('inference_type', infType.mode);
         formData.append('video_id', videoName);
         console.warn(`video_id: ${videoName}\ntext: ${input}\ninference_type: ${infType.mode}`);
-        const response = await axios.post(`${apiEndpoint}/video_chatbot_2.0`, formData, {
+        const response = await axios.post(`${apiEndpoint}/api/chatbot/video_chatbot_2.0`, formData, {
           headers: {
             'content-type': 'multipart/form-data',
           },
@@ -152,7 +152,7 @@ const Chatbot = ({ chatType, setChatType, videoStatus, warning, infType, videoNa
 
   const handleHistoryReset = async () => {
     try {
-      await axios.get(`${apiEndpoint}/reset_chat_history`);
+      await axios.get(`${apiEndpoint}/api/chatbot/reset_chat_history`);
       setMessages([]);
     } catch (error) {
       console.error(`Unable to wipe message history due to following error: ${error}`);

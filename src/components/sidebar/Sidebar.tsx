@@ -63,7 +63,7 @@ const Sidebar = ({ setChatType, setVideoStatus, setWarning, infType, setInfType,
             setWarning('Sending messages is disabled while processing video. Please wait.');
             setChatType({mode: 'Video'});
             console.log(formData.get('video'));
-            const response = await axios.post(`${apiEndpoint}/upload_video`, formData, {
+            const response = await axios.post(`${apiEndpoint}/api/chatbot/upload_video`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },

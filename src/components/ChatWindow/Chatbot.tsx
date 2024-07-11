@@ -15,6 +15,8 @@ import axios from 'axios';
 
 const apiEndpoint = 'http://localhost:8000';
 
+// const apiEndpoint = 'https://troll-deep-doe.ngrok-free.app';
+
 type chatType = {
   mode: "Image" | "Video";
 }

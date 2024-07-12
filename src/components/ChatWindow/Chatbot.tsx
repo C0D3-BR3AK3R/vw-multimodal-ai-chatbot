@@ -2,10 +2,12 @@ import { ChangeEvent, FormEvent, useState, useRef, useEffect } from 'react';
 
 // Importing the icons
 import { LuImagePlus } from "react-icons/lu";
-import { TfiVideoClapper } from "react-icons/tfi";
+// import { TfiVideoClapper } from "react-icons/tfi";
 import { IoSend } from "react-icons/io5";
 import { TbRefreshAlert } from "react-icons/tb";
 import { CiCircleRemove } from "react-icons/ci";
+
+import { ThreeDots } from "react-loader-spinner";
 
 import Markdown from 'react-markdown'
 import './Chatbot.css';
@@ -15,7 +17,7 @@ import axios from 'axios';
 
 const apiEndpoint = 'http://localhost:8000';
 
-// const apiEndpoint = 'https://troll-deep-doe.ngrok-free.app';
+// const apiEndpoint = 'https://lightly-rare-starfish.ngrok-free.app';
 
 type chatType = {
   mode: "Image" | "Video";
@@ -52,6 +54,7 @@ const Chatbot = ({ chatType, setChatType, videoStatus, warning, infType, videoNa
   const [input, setInput] = useState<string>('');
   const [imageUrl, setImage] = useState<string>('');
   const [videoUrl, setVideo] = useState<string>('');
+  const [responseLoading, setResponseLoading] = useState<boolean>(false);
 
   const imageInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
@@ -80,23 +83,29 @@ const Chatbot = ({ chatType, setChatType, videoStatus, warning, infType, videoNa
       const startTime = Date.now();
       let answer = '';
       if (chatType.mode === 'Image') {
+        setResponseLoading(true);
         const response = await axios.post(`${apiEndpoint}/api/chatbot/Chatbot`, formData, {
           headers: {
             'content-type': 'multipart/form-data',
           },
         });
         answer = response.data.answer;
+        answer ? setResponseLoading(false) : setResponseLoading(true);
       }
       else if (chatType.mode === 'Video'){
         formData.append('inference_type', infType.mode);
         formData.append('video_id', videoName);
         console.warn(`video_id: ${videoName}\ntext: ${input}\ninference_type: ${infType.mode}`);
+        setResponseLoading(true);
         const response = await axios.post(`${apiEndpoint}/api/chatbot/video_chatbot_2.0`, formData, {
           headers: {
             'content-type': 'multipart/form-data',
           },
         });
+
         answer = response.data.answer;
+        answer ? setResponseLoading(false) : setResponseLoading(true);
+        console.log(responseLoading);
       }
       const endTime = Date.now();
 
@@ -224,6 +233,15 @@ const Chatbot = ({ chatType, setChatType, videoStatus, warning, infType, videoNa
   //   setMessages((prevMessages) => ([...prevMessages, botMessage]));
   // };
 
+  // <button
+  //         type="button"
+  //         onClick={() => videoInputRef.current?.click()}
+  //         className='file-upload-button'
+  //         aria-label='Upload Video'
+  //       >
+  //         <TfiVideoClapper />
+  //       </button>
+
   return (
     <div className='chatbot-container'>
       <div className='chat-window'>
@@ -231,12 +249,23 @@ const Chatbot = ({ chatType, setChatType, videoStatus, warning, infType, videoNa
           <div key={index} className={`message ${message.sender}`}>
             <Markdown className='message-text'>{message.text}</Markdown>
             {message.imageUrl && <img src={message.imageUrl} alt='Uploaded content' className='uploaded-image' />}
-            <Markdown className='message-timestamp'>{message.timestamp.toLocaleString()}</Markdown>
-            {message.sender === 'bot' && message.responseTime && 
-              <div className='message-response-time response-time-style'>Response time: {message.responseTime} seconds</div>
-            }
+            
+              {message.sender === 'bot' && message.responseTime && (
+                <div className="message-time">
+                  <div className='response-time-style'>Response time: {message.responseTime} secs</div>
+                  <Markdown className="message-timestamp-bot">{message.timestamp.toLocaleString()}</Markdown>
+                </div>
+              )}
+              {message.sender === 'user' && (
+                <Markdown className="message-timestamp">{message.timestamp.toLocaleString()}</Markdown>
+              )}
           </div>
         ))}
+        { responseLoading && (
+          <div key="temp" className="message bot">
+            <ThreeDots color='#000' height={50} width={50} />
+          </div> 
+        ) };
       </div>
       <form onSubmit={handleSend} className='input-area' method='POST' encType='multipart/form-data'>
         <input
@@ -263,14 +292,7 @@ const Chatbot = ({ chatType, setChatType, videoStatus, warning, infType, videoNa
           className='file-upload'
           accept=".jpg,.png,.jpeg"
         />
-        <button
-          type="button"
-          onClick={() => videoInputRef.current?.click()}
-          className='file-upload-button'
-          aria-label='Upload Video'
-        >
-          <TfiVideoClapper />
-        </button>
+        
         <div className='text-box-with-preview'>
           {imageUrl && (
             <div className='img-preview'>
@@ -299,6 +321,7 @@ const Chatbot = ({ chatType, setChatType, videoStatus, warning, infType, videoNa
             className='text-box'
             aria-label='Message Input'
             ref={textInputRef}
+            disabled={videoStatus.status === 'processing'}
           />
         </div>
         <button type='submit' className='submit-button' aria-label='Send Message' disabled={videoStatus.status === 'processing'}>

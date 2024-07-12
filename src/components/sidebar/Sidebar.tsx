@@ -5,8 +5,10 @@ import './sidebar.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUpload, faRemove } from '@fortawesome/free-solid-svg-icons';
 
+import { DNA } from 'react-loader-spinner';
+
 const apiEndpoint = 'http://localhost:8000';
-// const apiEndpoint = 'https://troll-deep-doe.ngrok-free.app';
+// const apiEndpoint = 'https://lightly-rare-starfish.ngrok-free.app';
 
 type chatType = {
     mode: "Image" | "Video";
@@ -21,13 +23,14 @@ type InfType = {
 
 const formData = new FormData();
 
-const Sidebar = ({ setChatType, setVideoStatus, setWarning, infType, setInfType, setVideoName }: {
+const Sidebar = ({ setChatType, setVideoStatus, setWarning, infType, setInfType, setVideoName, videoStatus }: {
     setChatType: React.Dispatch<React.SetStateAction<chatType>>,
     setVideoStatus: React.Dispatch<React.SetStateAction<VideoStatus>>,
     setWarning: React.Dispatch<React.SetStateAction<string>>,
     infType: InfType,
     setInfType: React.Dispatch<React.SetStateAction<InfType>>,
-    setVideoName: React.Dispatch<React.SetStateAction<string>>
+    setVideoName: React.Dispatch<React.SetStateAction<string>>,
+    videoStatus: VideoStatus
 }) => {
 
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -100,11 +103,21 @@ const Sidebar = ({ setChatType, setVideoStatus, setWarning, infType, setInfType,
             <div className="sidebar-title">
                 <h1>WishVA</h1>
             </div>
+            
             <form method='POST' onSubmit={handleFormSubmit} encType='multipart/form-data'>
                 <div className="sidebar-container">
                     {videoURL ? (
                         <div className="video-preview">
-                            <video ref={videoRef} controls src={videoURL} autoPlay className='video'/>
+                            {videoStatus.status === 'processing' ? (
+                                <>
+                                    <DNA wrapperClass='dnaloader'/>
+                                    <div className='overlay'/>
+                                    <video ref={videoRef} controls src={videoURL} className='video'/>
+                                </>
+                            ) : (
+                                <video ref={videoRef} controls src={videoURL} className='video'/>
+                            )}
+                            
                         </div>
                         ) : (
                         <div className="upload-container">
@@ -117,7 +130,7 @@ const Sidebar = ({ setChatType, setVideoStatus, setWarning, infType, setInfType,
                     )}
                     <div className="button-container">
                         <button className='remove-button' onClick={handleVideoRemoval}><FontAwesomeIcon icon={faRemove} /></button>
-                        <button className="upload-button" type='submit'>Upload</button>
+                        <button className="upload-button" type='submit' disabled={!videoURL}>Process</button>
                         
                         {infType.mode === 'Full Context' ? 
                             (<button className='inf-type-toggle full-context' type='button' onClick={handleInfTypeToggle}><img src="./multipage_icon.png" alt="" className='toggle-icon' /></button>) :

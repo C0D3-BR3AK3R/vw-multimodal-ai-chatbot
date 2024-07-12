@@ -29,13 +29,31 @@
   text-align: left;
 }
 
+.message-time {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.message-timestamp-bot {
+  width: 25%;
+  font-size: 0.8em;
+  color: rgb(132, 132, 132);
+  text-align: right;
+}
+
 .message-timestamp {
   font-size: 0.8em;
   color: rgb(132, 132, 132);
   text-align: right;
 }
 
+.message-timestamp-bot p {
+  margin: 0;
+}
+
 .response-time-style {
+  width: 75%;
   font-size: 0.8em;
   color: grey;
   text-align: left;
@@ -45,11 +63,13 @@
   background-color: #001E50;
   color: #f1f0f0;
   align-self: flex-end;
+  font-size: 1.2rem;
 }
 
 .message.bot {
   background-color: #c7c7c7;
   color: #001E50;
+  font-size: 1.2rem;
   /* align-self: flex-start; */
 }
 
@@ -156,7 +176,8 @@
   flex-direction: row;
   color: red;
   font-size: 0.8em;
-  padding-left: 10px;
+  padding: 0.8vh;
+  padding-left: 2vh;
 }
 
 .img-preview button {

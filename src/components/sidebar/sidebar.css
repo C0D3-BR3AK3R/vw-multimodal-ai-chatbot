@@ -53,6 +53,7 @@
 }
 
 .video-preview {
+    position: relative;
     display: flex;
     width: 100%;
 }
@@ -61,6 +62,24 @@
     width: 100%;
     border-radius: 5px;
     margin: 15px 5px;
+}
+
+.overlay {
+    position: absolute;
+    top: 7.25%;
+    left: 1.75%;
+    width: 97%;
+    height: 85%;
+    background-color: rgba(0, 0, 0, 0.75);
+    border-radius: 5px;
+}
+
+.dnaloader {
+    position: absolute;
+    top: 30%;
+    left: 0;
+    width: 100%;
+    z-index: 1;
 }
 
 .upload-button {

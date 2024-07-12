@@ -32,6 +32,7 @@ function App() {
         infType = {infType}
         setInfType = {setInfType}
         setVideoName = {setVideoName}
+        videoStatus = {videoStatus}
       />
       <Chatbot 
         chatType={chatType}

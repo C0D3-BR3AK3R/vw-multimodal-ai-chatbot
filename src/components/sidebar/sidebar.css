@@ -88,8 +88,18 @@
     justify-content: center;
 }
 
-.transcript {
+.settings {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 2vh;
+    margin-left: 1vh;
+
+}
+
+.settings-menu {
     color: black;
+    margin-bottom: 2vh;
 }
 
 .toggle-icon {
@@ -98,7 +108,30 @@
 }
 
 .inf-type-toggle {
+    margin-top: 0.7vh;
+    margin-right: 1.2vh;
     align-content: center;
     height: 43px;
-    width: auto;
+}
+
+.context-toggle {
+    display: flex;
+    margin-left: 5vh;
+}
+
+.frame-interval {
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+    margin-left: 5vh;
+    margin-right: 1.2vh;
+    padding-left: 2vh;
+    border-radius: 5px;
+    height: 3.5vh;
+    width: 4.5vh;
+    font-size: large;
+    color: whitesmoke;
+}
+
+.reset-chat {
+    margin-left: 5vh;
 }

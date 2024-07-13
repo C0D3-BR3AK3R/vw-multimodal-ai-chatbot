@@ -15,6 +15,15 @@ type InfType = {
   mode: "Full Context" | "VectorDB Timestamp";
 }
 
+type MessageProps = {
+  sender: 'user' | 'bot';
+  text: string;
+  imageUrl?: string;
+  videoUrl?: string;
+  timestamp: string;
+  responseTime?: number;
+}
+
 function App() {
 
   const [chatType, setChatType] = useState<chatType>({mode: "Image"});
@@ -22,6 +31,7 @@ function App() {
   const [warning, setWarning] = useState<string>('');
   const [infType, setInfType] = useState<InfType>({mode: "Full Context"});
   const [videoName, setVideoName] = useState<string>('');
+  const [messages, setMessages] = useState<MessageProps[]>([]);
 
   return (
     <div className='app'>
@@ -33,6 +43,7 @@ function App() {
         setInfType = {setInfType}
         setVideoName = {setVideoName}
         videoStatus = {videoStatus}
+        setMessages = {setMessages}
       />
       <Chatbot 
         chatType={chatType}
@@ -41,6 +52,8 @@ function App() {
         warning={warning}
         infType={infType}
         videoName={videoName}
+        messages={messages}
+        setMessages={setMessages}
       />
     </div>
   )

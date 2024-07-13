@@ -31,7 +31,7 @@ type InfType = {
   mode: "Full Context" | "VectorDB Timestamp";
 }
 
-interface MessageProps {
+type MessageProps = {
   sender: 'user' | 'bot';
   text: string;
   imageUrl?: string;
@@ -42,15 +42,17 @@ interface MessageProps {
 
 const formData = new FormData();
 
-const Chatbot = ({ chatType, setChatType, videoStatus, warning, infType, videoName }: { 
+const Chatbot = ({ chatType, setChatType, videoStatus, warning, infType, videoName, messages, setMessages }: { 
   chatType: chatType, 
   setChatType: React.Dispatch<React.SetStateAction<chatType>>,
   videoStatus:  VideoStatus,
   warning: string,
   infType: InfType,
   videoName: string,
+  messages: MessageProps[],
+  setMessages: React.Dispatch<React.SetStateAction<MessageProps[]>>
 }) => {
-  const [messages, setMessages] = useState<MessageProps[]>([]);
+  // const [messages, setMessages] = useState<MessageProps[]>([]);
   const [input, setInput] = useState<string>('');
   const [imageUrl, setImage] = useState<string>('');
   const [videoUrl, setVideo] = useState<string>('');

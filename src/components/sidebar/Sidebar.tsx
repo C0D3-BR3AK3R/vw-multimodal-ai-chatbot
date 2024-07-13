@@ -21,25 +21,40 @@ type InfType = {
     mode: "Full Context" | "VectorDB Timestamp";
 }
 
+type MessageProps = {
+    sender: 'user' | 'bot';
+    text: string;
+    imageUrl?: string;
+    videoUrl?: string;
+    timestamp: string;
+    responseTime?: number;
+  }
+
 const formData = new FormData();
 
-const Sidebar = ({ setChatType, setVideoStatus, setWarning, infType, setInfType, setVideoName, videoStatus }: {
+const Sidebar = ({ setChatType, setVideoStatus, setWarning, infType, setInfType, setVideoName, videoStatus, setMessages }: {
     setChatType: React.Dispatch<React.SetStateAction<chatType>>,
     setVideoStatus: React.Dispatch<React.SetStateAction<VideoStatus>>,
     setWarning: React.Dispatch<React.SetStateAction<string>>,
     infType: InfType,
     setInfType: React.Dispatch<React.SetStateAction<InfType>>,
     setVideoName: React.Dispatch<React.SetStateAction<string>>,
-    videoStatus: VideoStatus
+    videoStatus: VideoStatus,
+    setMessages: React.Dispatch<React.SetStateAction<MessageProps[]>>
 }) => {
 
     const fileInputRef = useRef<HTMLInputElement>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
     const [videoURL, setVideoURL] = useState<string>('');
+    const [frameInterval, setFrameInterval] = useState<number>(75);
 
     const handleClick = () => {
         if (fileInputRef.current) fileInputRef.current.click();
     };
+
+    const handleFrameIntervalChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setFrameInterval(parseInt(event.target.value));
+    }
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files[0]) {
@@ -59,9 +74,21 @@ const Sidebar = ({ setChatType, setVideoStatus, setWarning, infType, setInfType,
         setVideoStatus({status: 'null'});
     }
 
+    const handleReset = () => {
+        axios.get(`${apiEndpoint}/api/chatbot/reset_chat_history`)
+            .then(response => {
+                console.log(response.data);
+            })
+            .catch(error => {
+                console.log(error);
+            });
+        setMessages([]);
+    }
+
     const handleFormSubmit = async (event: FormEvent) => {
         event.preventDefault();
         if (!videoURL) return;
+        formData.append('frameInterval', frameInterval.toString());
         try {
             setVideoStatus({status: 'processing'});
             setWarning('Sending messages is disabled while processing video. Please wait.');
@@ -73,6 +100,8 @@ const Sidebar = ({ setChatType, setVideoStatus, setWarning, infType, setInfType,
                 },
             });
             console.log(response.data.status);
+            const resetMessages = await axios.get(`${apiEndpoint}/api/chatbot/reset_chat_history`);
+            console.log(resetMessages.data);
             if (response.data.status === 'processed') {
                 setVideoStatus({status: 'processed'});
                 setWarning('');
@@ -131,15 +160,25 @@ const Sidebar = ({ setChatType, setVideoStatus, setWarning, infType, setInfType,
                     <div className="button-container">
                         <button className='remove-button' onClick={handleVideoRemoval}><FontAwesomeIcon icon={faRemove} /></button>
                         <button className="upload-button" type='submit' disabled={!videoURL}>Process</button>
-                        
-                        {infType.mode === 'Full Context' ? 
-                            (<button className='inf-type-toggle full-context' type='button' onClick={handleInfTypeToggle}><img src="./multipage_icon.png" alt="" className='toggle-icon' /></button>) :
-                            (<button className='inf-type-toggle vectordb' type='button' onClick={handleInfTypeToggle}><img src="./db-icon.png" alt="" className='toggle-icon' /></button>)
-                        }
                     </div>
-                    <div className="transcript">
-                        <h2>Transcript</h2>
-                        <p>Transcript will be displayed here</p>
+                    <div className="settings-menu">
+                        <h2>Settings</h2>
+                        <div className="settings">
+                            <div className='context-toggle'>
+                                {infType.mode === 'Full Context' ? 
+                                    (<button className='inf-type-toggle full-context' type='button' onClick={handleInfTypeToggle}><img src="./multipage_icon.png" alt="" className='toggle-icon' /></button>) :
+                                    (<button className='inf-type-toggle vectordb' type='button' onClick={handleInfTypeToggle}><img src="./db-icon.png" alt="" className='toggle-icon' /></button>)
+                                }
+                                <p>{infType.mode}</p>
+                            </div>
+                            <div className='frame-interval-input'>
+                                <input type="number" className="frame-interval" name="frame-interval" min="25" defaultValue={75} onChange={handleFrameIntervalChange}/>
+                                <label htmlFor="frame-interval">Frame Interval</label>
+                            </div>
+                            <div className='reset-chat'>
+                                <button className='reset-chat-button' onClick={handleReset} type='button'>Reset Chat</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </form>

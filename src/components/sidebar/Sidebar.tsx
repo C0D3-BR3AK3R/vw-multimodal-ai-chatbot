@@ -7,8 +7,8 @@ import { faUpload, faRemove } from '@fortawesome/free-solid-svg-icons';
 
 import { DNA } from 'react-loader-spinner';
 
-const apiEndpoint = 'http://localhost:8000';
-// const apiEndpoint = 'https://lightly-rare-starfish.ngrok-free.app';
+// const apiEndpoint = 'http://localhost:8000';
+const apiEndpoint = 'https://lightly-rare-starfish.ngrok-free.app';
 
 type chatType = {
     mode: "Image" | "Video";
